@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/todos")
@@ -17,7 +18,7 @@ public class TodoController {
   @GetMapping("/{id}") public TodoResponse one(@PathVariable Long id){ return service.findById(id); }
 
   @PostMapping
-  public ResponseEntity<TodoResponse> create(@RequestBody TodoRequest req){
+  public ResponseEntity<TodoResponse> create(@Valid @RequestBody TodoRequest req){
     var saved = service.create(req);
     return ResponseEntity.created(URI.create("/api/v1/todos/" + saved.id())).body(saved);
   }
