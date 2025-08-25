@@ -2,7 +2,7 @@
 
 Java 21 • Spring Boot 3.5 • REST API • JPA/H2 • JUnit • Swagger/OpenAPI
 
-A simple but complete microservice for managing **Todos**.\
+A simple microservice for managing **Todos**.\
 It serves as a **demo project** for REST APIs, JPA/Hibernate, DTOs,
 validation, Swagger documentation, and H2 database usage.
 
@@ -26,7 +26,7 @@ validation, Swagger documentation, and H2 database usage.
 ### 1. Local with Maven
 
 ``` bash
-./mvnw spring-boot:run
+.\mvnw spring-boot:run
 ```
 
 ## API Docs
@@ -122,7 +122,7 @@ SELECT * FROM TODO;
 Run unit and integration tests:
 
 ``` bash
-./mvnw test
+.\mvnw test
 ```
 
 ------------------------------------------------------------------------
