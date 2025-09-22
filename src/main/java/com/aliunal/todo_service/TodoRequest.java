@@ -1,4 +1,4 @@
-package com.aliunal.todo_service.dto;
+package com.aliunal.todo_service;
 import jakarta.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

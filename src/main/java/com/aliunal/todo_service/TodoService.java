@@ -1,8 +1,5 @@
-package com.aliunal.todo_service.service;
+package com.aliunal.todo_service;
 
-import com.aliunal.todo_service.domain.Todo;
-import com.aliunal.todo_service.dto.*;
-import com.aliunal.todo_service.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

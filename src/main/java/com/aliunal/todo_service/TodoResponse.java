@@ -1,4 +1,4 @@
-package com.aliunal.todo_service.dto;
+package com.aliunal.todo_service;
 import java.time.Instant;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

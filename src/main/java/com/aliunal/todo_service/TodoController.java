@@ -1,7 +1,5 @@
-package com.aliunal.todo_service.controller;
+package com.aliunal.todo_service;
 
-import com.aliunal.todo_service.dto.*;
-import com.aliunal.todo_service.service.TodoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.net.URI;
