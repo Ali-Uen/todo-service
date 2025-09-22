@@ -1,9 +1,10 @@
 package com.aliunal.todo_service.service;
 
-import com.aliunal.todo_service.domain.Todo;
-import com.aliunal.todo_service.dto.TodoRequest;
-import com.aliunal.todo_service.dto.TodoResponse;
-import com.aliunal.todo_service.repository.TodoRepository;
+import com.aliunal.todo_service.Todo;
+import com.aliunal.todo_service.TodoRequest;
+import com.aliunal.todo_service.TodoResponse;
+import com.aliunal.todo_service.TodoRepository;
+import com.aliunal.todo_service.TodoService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;

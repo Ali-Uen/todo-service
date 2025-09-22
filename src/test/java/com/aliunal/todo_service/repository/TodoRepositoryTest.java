@@ -1,6 +1,7 @@
 package com.aliunal.todo_service.repository;
 
-import com.aliunal.todo_service.domain.Todo;
+import com.aliunal.todo_service.Todo;
+import com.aliunal.todo_service.TodoRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
