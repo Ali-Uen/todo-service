@@ -2,7 +2,7 @@ import { TodoItem } from './TodoItem';
 import './TodoList.css';
 import './LoadingStates.css';
 
-export function TodoList({ todos, loading, error, onToggle, onDelete }) {
+export function TodoList({ todos, loading, error, onToggle, onDelete, onUpdate }) {
   if (loading) {
     return (
       <div className="todo-list">
@@ -51,6 +51,7 @@ export function TodoList({ todos, loading, error, onToggle, onDelete }) {
           todo={todo}
           onToggle={onToggle}
           onDelete={onDelete}
+          onUpdate={onUpdate}
         />
       ))}
     </div>
