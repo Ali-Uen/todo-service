@@ -1,5 +1,6 @@
 import { AddTodoForm } from './components/AddTodoForm';
 import { TodoList } from './components/TodoList';
+import { ToastContainer } from './components/ToastContainer';
 import { useTodos } from './hooks/useTodos';
 import './App.css';
 
@@ -9,6 +10,7 @@ function App() {
     loading,
     error,
     addTodo,
+    updateTodo,
     deleteTodo,
     toggleTodo
   } = useTodos();
@@ -43,6 +45,7 @@ function App() {
             error={error}
             onToggle={toggleTodo}
             onDelete={deleteTodo}
+            onUpdate={updateTodo}
           />
         </main>
 
@@ -50,6 +53,8 @@ function App() {
           <p>React Todo App mit Spring Boot Backend</p>
         </footer>
       </div>
+      
+      <ToastContainer />
     </div>
   );
 }

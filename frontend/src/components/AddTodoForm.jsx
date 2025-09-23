@@ -1,26 +1,36 @@
 import { useState } from 'react';
 import './AddTodoForm.css';
+import { useToast } from '../hooks/useToast';
 
 export function AddTodoForm({ onAdd, loading }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [priority, setPriority] = useState('MEDIUM');
   const [submitting, setSubmitting] = useState(false);
+  const toast = useToast();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim()) {
+      toast.error('Bitte geben Sie einen Titel ein');
+      return;
+    }
 
     setSubmitting(true);
     try {
       await onAdd({
         title: title.trim(),
         description: description.trim() || null,
+        priority: priority,
         done: false
       });
       setTitle('');
       setDescription('');
+      setPriority('MEDIUM');
+      toast.success('Todo erfolgreich erstellt!');
     } catch (error) {
       console.error('Failed to add todo:', error);
+      toast.error('Fehler beim Erstellen des Todos');
     } finally {
       setSubmitting(false);
     }
@@ -46,12 +56,22 @@ export function AddTodoForm({ onAdd, loading }) {
           disabled={submitting || loading}
           className="description-input"
         />
+        <select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+          disabled={submitting || loading}
+          className="priority-select"
+        >
+          <option value="LOW">Niedrig</option>
+          <option value="MEDIUM">Mittel</option>
+          <option value="HIGH">Hoch</option>
+        </select>
         <button
           type="submit"
           disabled={!title.trim() || submitting || loading}
           className="add-button"
         >
-          {submitting ? 'Hinzufügen...' : 'Hinzufügen'}
+          <span>{submitting ? 'Hinzufügen...' : 'Todo hinzufügen'}</span>
         </button>
       </div>
     </form>
