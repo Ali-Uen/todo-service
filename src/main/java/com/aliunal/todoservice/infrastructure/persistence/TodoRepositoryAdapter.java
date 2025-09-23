@@ -41,6 +41,11 @@ public class TodoRepositoryAdapter implements TodoRepository {
     }
     
     @Override
+    public List<Todo> findByPriority(Todo.Priority priority) {
+        return jpaRepository.findByPriority(priority);
+    }
+    
+    @Override
     public List<Todo> findByTitleContainingIgnoreCase(String title) {
         return jpaRepository.findByTitleContainingIgnoreCase(title);
     }

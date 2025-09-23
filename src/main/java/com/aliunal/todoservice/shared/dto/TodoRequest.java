@@ -1,5 +1,6 @@
 package com.aliunal.todoservice.shared.dto;
 
+import com.aliunal.todoservice.domain.todo.entity.Todo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -17,21 +18,23 @@ public record TodoRequest(
         @Size(max = 1000, message = "Description must not exceed 1000 characters")
         String description,
         
-        @JsonProperty("completed")
-        Boolean done
+        @JsonProperty("done")
+        Boolean done,
+        
+        Todo.Priority priority
 ) {
     
     /**
      * Constructor with defaults for creation
      */
     public TodoRequest(String title, String description) {
-        this(title, description, false);
+        this(title, description, false, Todo.Priority.MEDIUM);
     }
     
     /**
      * Constructor for title only
      */
     public TodoRequest(String title) {
-        this(title, null, false);
+        this(title, null, false, Todo.Priority.MEDIUM);
     }
 }

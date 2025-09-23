@@ -20,6 +20,11 @@ public interface JpaTodoRepository extends JpaRepository<Todo, Long> {
     List<Todo> findByDone(boolean done);
     
     /**
+     * Find todos by priority
+     */
+    List<Todo> findByPriority(Todo.Priority priority);
+    
+    /**
      * Find todos containing title (case insensitive)
      */
     List<Todo> findByTitleContainingIgnoreCase(String title);

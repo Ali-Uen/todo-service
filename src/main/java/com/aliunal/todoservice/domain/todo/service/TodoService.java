@@ -73,6 +73,12 @@ public class TodoService {
         validateTodoRequest(request);
         
         Todo todo = new Todo(request.title(), request.description());
+        
+        // Set priority (default to MEDIUM if not provided)
+        if (request.priority() != null) {
+            todo.updatePriority(request.priority());
+        }
+        
         if (request.done() != null && request.done()) {
             todo.markAsDone();
         }
@@ -95,6 +101,11 @@ public class TodoService {
             String newTitle = request.title() != null ? request.title() : todo.getTitle();
             String newDescription = request.description() != null ? request.description() : todo.getDescription();
             todo.updateContent(newTitle, newDescription);
+        }
+        
+        // Update priority if provided
+        if (request.priority() != null) {
+            todo.updatePriority(request.priority());
         }
         
         // Update completion status if provided
@@ -138,7 +149,18 @@ public class TodoService {
     }
     
     /**
-     * Get todo statistics
+     * Find todos by priority
+     */
+    @Transactional(readOnly = true)
+    public List<TodoResponse> findByPriority(Todo.Priority priority) {
+        return todoRepository.findByPriority(priority)
+                .stream()
+                .map(TodoResponse::from)
+                .toList();
+    }
+    
+    /**
+     * Get todo statistics including priority breakdown
      */
     @Transactional(readOnly = true)
     public TodoStatistics getStatistics() {

@@ -14,9 +14,10 @@ public record TodoResponse(
         String title,
         String description,
         
-        @JsonProperty("completed")
+        @JsonProperty("done")
         boolean done,
         
+        Todo.Priority priority,
         Instant createdAt,
         Instant updatedAt
 ) {
@@ -30,6 +31,7 @@ public record TodoResponse(
                 todo.getTitle(),
                 todo.getDescription(),
                 todo.isDone(),
+                todo.getPriority(),
                 todo.getCreatedAt(),
                 todo.getUpdatedAt()
         );
@@ -44,6 +46,7 @@ public record TodoResponse(
                 todo.getTitle(),
                 todo.getDescription(),
                 todo.isDone(),
+                todo.getPriority(),
                 todo.getCreatedAt(),
                 null
         );

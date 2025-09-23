@@ -31,6 +31,11 @@ public interface TodoRepository {
     List<Todo> findByDone(boolean done);
     
     /**
+     * Find todos by priority
+     */
+    List<Todo> findByPriority(Todo.Priority priority);
+    
+    /**
      * Find todos containing title
      */
     List<Todo> findByTitleContainingIgnoreCase(String title);

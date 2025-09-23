@@ -24,19 +24,48 @@ public class Todo {
     @Column(nullable = false)
     private boolean done = false;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Priority priority = Priority.MEDIUM;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
     @Column(nullable = false)
     private Instant updatedAt = Instant.now();
 
+    /**
+     * Priority enum for todos
+     */
+    public enum Priority {
+        LOW("Niedrig"),
+        MEDIUM("Mittel"), 
+        HIGH("Hoch");
+        
+        private final String displayName;
+        
+        Priority(String displayName) {
+            this.displayName = displayName;
+        }
+        
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
     // Default constructor for JPA
     protected Todo() {}
 
     // Constructor for creating new todos
     public Todo(String title, String description) {
+        this(title, description, Priority.MEDIUM);
+    }
+
+    // Constructor with priority
+    public Todo(String title, String description, Priority priority) {
         this.title = title;
         this.description = description;
+        this.priority = priority != null ? priority : Priority.MEDIUM;
         this.done = false;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
@@ -56,6 +85,18 @@ public class Todo {
     public void updateContent(String title, String description) {
         this.title = title;
         this.description = description;
+        this.updatedAt = Instant.now();
+    }
+
+    public void updateContent(String title, String description, Priority priority) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority != null ? priority : this.priority;
+        this.updatedAt = Instant.now();
+    }
+
+    public void updatePriority(Priority priority) {
+        this.priority = priority != null ? priority : Priority.MEDIUM;
         this.updatedAt = Instant.now();
     }
 
@@ -84,6 +125,10 @@ public class Todo {
         return updatedAt;
     }
 
+    public Priority getPriority() {
+        return priority;
+    }
+
     // Setters (package-private for JPA)
     void setId(Long id) {
         this.id = id;
@@ -107,6 +152,10 @@ public class Todo {
 
     void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
     @Override
