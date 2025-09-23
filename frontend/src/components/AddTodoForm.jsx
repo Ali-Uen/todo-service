@@ -51,7 +51,7 @@ export function AddTodoForm({ onAdd, loading }) {
           disabled={!title.trim() || submitting || loading}
           className="add-button"
         >
-          {submitting ? 'Hinzufügen...' : 'Hinzufügen'}
+          <span>{submitting ? 'Hinzufügen...' : 'Todo hinzufügen'}</span>
         </button>
       </div>
     </form>
