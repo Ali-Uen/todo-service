@@ -1,6 +1,6 @@
 package com.aliunal.todoservice.shared.dto;
 
-import com.aliunal.todoservice.domain.todo.entity.Todo;
+import com.aliunal.todoservice.shared.enums.Priority;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -21,20 +21,20 @@ public record TodoRequest(
         @JsonProperty("done")
         Boolean done,
         
-        Todo.Priority priority
+        Priority priority
 ) {
     
     /**
      * Constructor with defaults for creation
      */
     public TodoRequest(String title, String description) {
-        this(title, description, false, Todo.Priority.MEDIUM);
+        this(title, description, false, Priority.MEDIUM);
     }
     
     /**
      * Constructor for title only
      */
     public TodoRequest(String title) {
-        this(title, null, false, Todo.Priority.MEDIUM);
+        this(title, null, false, Priority.MEDIUM);
     }
 }

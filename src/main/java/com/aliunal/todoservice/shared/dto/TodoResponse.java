@@ -2,6 +2,7 @@ package com.aliunal.todoservice.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.aliunal.todoservice.domain.todo.entity.Todo;
+import com.aliunal.todoservice.shared.enums.Priority;
 
 import java.time.Instant;
 
@@ -17,7 +18,7 @@ public record TodoResponse(
         @JsonProperty("done")
         boolean done,
         
-        Todo.Priority priority,
+        Priority priority,
         Instant createdAt,
         Instant updatedAt
 ) {
