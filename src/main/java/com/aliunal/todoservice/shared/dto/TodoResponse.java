@@ -14,7 +14,6 @@ public record TodoResponse(
         String title,
         String description,
         
-        @JsonProperty("done")
         boolean done,
         
         Todo.Priority priority,
