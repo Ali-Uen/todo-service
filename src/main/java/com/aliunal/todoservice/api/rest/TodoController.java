@@ -3,6 +3,7 @@ package com.aliunal.todoservice.api.rest;
 import com.aliunal.todoservice.domain.todo.service.TodoService;
 import com.aliunal.todoservice.shared.dto.TodoRequest;
 import com.aliunal.todoservice.shared.dto.TodoResponse;
+import com.aliunal.todoservice.shared.dto.TodoStatistics;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 import java.util.List;
 
 /**
@@ -158,8 +158,8 @@ public class TodoController {
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/statistics")
-    public ResponseEntity<TodoService.TodoStatistics> getStatistics() {
-        TodoService.TodoStatistics stats = todoService.getStatistics();
+    public ResponseEntity<TodoStatistics> getStatistics() {
+        TodoStatistics stats = todoService.getStatistics();
         return ResponseEntity.ok(stats);
     }
     

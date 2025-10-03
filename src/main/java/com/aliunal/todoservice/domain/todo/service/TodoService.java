@@ -4,6 +4,7 @@ import com.aliunal.todoservice.domain.todo.entity.Todo;
 import com.aliunal.todoservice.domain.todo.repository.TodoRepository;
 import com.aliunal.todoservice.shared.dto.TodoRequest;
 import com.aliunal.todoservice.shared.dto.TodoResponse;
+import com.aliunal.todoservice.shared.dto.TodoStatistics;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -176,9 +177,4 @@ public class TodoService {
             throw new IllegalArgumentException("Title cannot be empty");
         }
     }
-    
-    /**
-     * Statistics record for todo counts
-     */
-    public record TodoStatistics(long total, long completed, long pending) {}
 }

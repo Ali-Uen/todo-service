@@ -1,136 +1,164 @@
-# 🚀 Todo Service
+# 📋 Todo Service
 
-> **Full-Stack Todo Application with React Frontend and Spring Boot Backend**
+> **Modern Full-Stack Todo Management Platform**
 
-![Java](https://img.shields.io/badge/Java-21-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.4-green) ![React](https://img.shields.io/badge/React-19.1-blue) ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
+![Java](https://img.shields.io/badge/Java-21-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.4-green) ![React](https://img.shields.io/badge/React-19.1-blue) ![Expo](https://img.shields.io/badge/Expo-54.0-black) ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
 
-Modern todo management application featuring a **React frontend** with **Spring Boot microservice backend**, demonstrating clean architecture, REST API design, and containerized deployment.
-
----
-
-## 🏗️ Architecture
-
-### **Backend (Spring Boot)**
-```
-src/main/java/com/aliunal/todoservice/
-├── api/rest/           # REST Controllers & Exception Handling
-├── domain/todo/        # Business Logic & Entities
-│   ├── entity/         # JPA Entities
-│   ├── repository/     # Domain Repository Interfaces
-│   └── service/        # Business Services
-├── infrastructure/     # External Dependencies
-│   └── persistence/    # JPA Repository Implementations
-└── shared/dto/         # Data Transfer Objects
-```
-
-### **Frontend (React + Vite)**
-```
-frontend/src/
-├── components/         # React Components (AddTodoForm, TodoItem, TodoList)
-├── hooks/              # Custom React Hooks (useTodos, useToast)
-├── services/           # API Communication (todoApi)
-└── App.jsx             # Main Application
-```
-
-### **Technology Stack**
-- **Backend**: Java 21, Spring Boot 3.5.4, Spring Data JPA, H2 Database
-- **Frontend**: React 19.1, Vite 7, Modern ES6+, CSS Modules
-- **API**: RESTful API with OpenAPI/Swagger documentation
-- **Database**: H2 (file-based persistence)
-- **Container**: Docker with multi-stage build
+Todo management system with cross-platform support. Features modern web and mobile interfaces powered by Spring Boot backend, showcasing clean architecture and containerized deployment.
 
 ---
 
-## 🚀 Quick Start
+## 🏗️ System Architecture
 
-### Prerequisites
-- **Java 21+**
-- **Node.js 18.17+** (for frontend development)
-- **Docker** (for containerized deployment)
+```mermaid
+graph TB
+    subgraph "Client Applications"
+        WEB[🌐 React Web App<br/>localhost:3000]
+        MOBILE[📱 Expo Mobile App<br/>React Native]
+    end
+    
+    subgraph "Backend Services"
+        API[🔗 REST API<br/>Spring Boot 3.5.4<br/>localhost:8080]
+        SWAGGER[📚 API Documentation<br/>/swagger-ui]
+    end
+    
+    subgraph "Data Layer"
+        H2[(💾 H2 Database<br/>Embedded)]
+    end
+    
+    subgraph "Infrastructure"
+        DOCKER[🐳 Docker Container<br/>Production Ready]
+    end
+    
+    WEB --> API
+    MOBILE --> API
+    API --> H2
+    API -.-> SWAGGER
+    DOCKER -.-> API
+    
+    classDef frontend fill:#e3f2fd,stroke:#1976d2
+    classDef backend fill:#e8f5e8,stroke:#388e3c
+    classDef database fill:#fff3e0,stroke:#f57c00
+    classDef infrastructure fill:#fce4ec,stroke:#c2185b
+    
+    class WEB,MOBILE frontend
+    class API,SWAGGER backend
+    class H2 database
+    class DOCKER infrastructure
+```
 
-### Local Development
+---
+
+## 🚀 Quick Start Guide
+
+### **🔧 Backend Development**
 ```bash
 # Start Spring Boot application
 ./mvnw spring-boot:run
 
-# For frontend development (separate terminal)
-cd frontend && npm install && npm run dev
+# Access points:
+# 🌐 API: http://localhost:8080
+# 📚 Docs: http://localhost:8080/swagger-ui
 ```
 
-### Production Build
+### **💻 Web Frontend**
 ```bash
-# Build integrated application (React + Spring Boot)
-./mvnw clean package
+# Setup and start React application
+cd frontend
+npm install
+npm run dev
 
-# Run integrated application
-java -jar target/todo-service-0.0.1-SNAPSHOT.jar
+# 🌐 Web App: http://localhost:3000
 ```
 
-### Docker Deployment
+### **📱 Mobile App**
 ```bash
-# Build and run
-docker build -t todo-app . && docker run -d --name todo-app -p 8080:8080 todo-app:latest
+# Setup and start Expo application
+cd mobile-expo
+npm install
+npm start
+
+# 📱 Scan QR code with Expo Go app
+```
+
+### **🐳 Production Deployment**
+```bash
+# Build and run Docker container
+docker build -t todo-service .
+docker run -p 8080:8080 todo-service
+
+# 🌐 Production: http://localhost:8080
 ```
 
 ---
 
-## 🎯 Features
+## 🛠️ Technology Stack
 
-### **Frontend**
-- ✅ Modern React UI with responsive design
-- ✅ Edit-in-Place functionality (double-click to edit)
-- ✅ Toast notifications for user feedback
-- ✅ Priority system (HIGH/MEDIUM/LOW) with color coding
-- ✅ Real-time updates with optimistic UI
-- ✅ Form validation with error handling
+```mermaid
+graph LR
+    subgraph "Frontend Ecosystem 🎨"
+        REACT[React 19.1<br/>Modern UI]
+        VITE[Vite 7.0<br/>Build Tool]
+        EXPO[Expo 54.0<br/>Mobile Framework]
+        RN[React Native<br/>Cross-Platform]
+    end
+    
+    subgraph "Backend Ecosystem ⚙️"
+        JAVA[Java 21<br/>Runtime]
+        SPRING[Spring Boot 3.5.4<br/>Framework]
+        MAVEN[Maven 3.9.11<br/>Build Tool]
+    end
+    
+    subgraph "Infrastructure 🏗️"
+        H2[(H2 Database<br/>Embedded)]
+        DOCKER[🐳 Docker<br/>Containerization]
+    end
+    
+    REACT -.->|REST API| SPRING
+    EXPO -.->|REST API| SPRING
+    SPRING --> H2
+    
+    classDef frontend fill:#4fc3f7,color:#000,stroke:#0277bd
+    classDef backend fill:#81c784,color:#000,stroke:#388e3c
+    classDef infrastructure fill:#ffb74d,color:#000,stroke:#f57c00
+    
+    class REACT,VITE,EXPO,RN frontend
+    class JAVA,SPRING,MAVEN backend
+    class H2,DOCKER infrastructure
+```
 
-### **Backend**
-- ✅ REST API (`/api/v1/todos`) with full CRUD operations
-- ✅ Domain-Driven Design with clean architecture
-- ✅ JPA entities with proper relationships
-- ✅ DTO pattern for API contracts
-- ✅ Bean validation and global exception handling
-- ✅ Swagger documentation for API exploration
+### **Detailed Stack Overview**
 
----
+| 🏷️ **Layer** | 🔧 **Technology** | 📝 **Purpose** | 🔗 **Version** |
+|---------------|-------------------|----------------|----------------|
+| **Backend API** | Spring Boot | REST API & Business Logic | 3.5.4 |
+| **Runtime** | Java | Application Runtime | 21 |
+| **Database** | H2 Database | Embedded Data Storage | Latest |
+| **Web Frontend** | React + Vite | Modern Single Page Application | 19.1 + 7.0 |
+| **Mobile App** | Expo + React Native | Cross-Platform Mobile | 54.0 |
+| **Build Tools** | Maven | Dependency Management | 3.9.11 |
+| **Deployment** | Docker | Containerized Production | Latest |
 
-## 📚 API Documentation
 
-- **Application**: http://localhost:8080
-- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
-- **OpenAPI Spec**: http://localhost:8080/v3/api-docs
-- **H2 Console**: http://localhost:8080/h2-console (dev only)
+## 🔗 API Endpoints
 
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/todos` | Fetch all todos |
+| `POST` | `/api/todos` | Create new todo |
+| `PUT` | `/api/todos/{id}` | Update existing todo |
+| `DELETE` | `/api/todos/{id}` | Delete todo |
 
-## 🗺️ Roadmap
-
-### **Phase 1: Core Features** 
-- [x] Basic CRUD operations
-- [x] React frontend integration
-- [x] Docker deployment
-- [x] Edit-in-place functionality
-- [x] Priority system
-- [x] Toast notifications
-
-### **Phase 2: Enhanced UX** 
-- [ ] **User Authentication** (Spring Security + JWT)
-- [ ] **Categories/Tags** for todos
-- [ ] **Due Dates** with calendar integration
-- [ ] **Search & Filtering** functionality
-- [ ] **Drag & Drop** reordering
-- [ ] **Dark/Light Theme** toggle
-
-### **Phase 3: Advanced Features** 
-- [ ] **Real-time Collaboration** (WebSockets)
-- [ ] **File Attachments** support
-- [ ] **Email Notifications** for due dates
-- [ ] **Mobile App** (React Native)
-- [ ] **Offline Support** (PWA)
+📚 **Full API Documentation**: [http://localhost:8080/swagger-ui](http://localhost:8080/swagger-ui)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
+---
+
+**👨‍💻 Author**: [Ali Ünal](https://github.com/Ali-Uen)
+
+---
