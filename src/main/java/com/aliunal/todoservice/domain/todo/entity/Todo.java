@@ -2,6 +2,7 @@ package com.aliunal.todoservice.domain.todo.entity;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import com.aliunal.todoservice.shared.enums.Priority;
 
 /**
  * Todo Entity - Domain Object
@@ -28,44 +29,29 @@ public class Todo {
     @Column(nullable = false)
     private Priority priority = Priority.MEDIUM;
 
+    @Column(name = "user_id", nullable = true)  // Temporarily nullable for migration
+    private Long userId;
+
     @Column(nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
     @Column(nullable = false)
     private Instant updatedAt = Instant.now();
 
-    /**
-     * Priority enum for todos
-     */
-    public enum Priority {
-        LOW("Niedrig"),
-        MEDIUM("Mittel"), 
-        HIGH("Hoch");
-        
-        private final String displayName;
-        
-        Priority(String displayName) {
-            this.displayName = displayName;
-        }
-        
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-
     // Default constructor for JPA
     protected Todo() {}
 
     // Constructor for creating new todos
-    public Todo(String title, String description) {
-        this(title, description, Priority.MEDIUM);
+    public Todo(String title, String description, Long userId) {
+        this(title, description, Priority.MEDIUM, userId);
     }
 
     // Constructor with priority
-    public Todo(String title, String description, Priority priority) {
+    public Todo(String title, String description, Priority priority, Long userId) {
         this.title = title;
         this.description = description;
         this.priority = priority != null ? priority : Priority.MEDIUM;
+        this.userId = userId;
         this.done = false;
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
@@ -129,6 +115,10 @@ public class Todo {
         return priority;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
     // Setters (package-private for JPA)
     void setId(Long id) {
         this.id = id;
@@ -158,12 +148,17 @@ public class Todo {
         this.priority = priority;
     }
 
+    void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Todo{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", done=" + done +
+                ", userId=" + userId +
                 ", createdAt=" + createdAt +
                 '}';
     }
