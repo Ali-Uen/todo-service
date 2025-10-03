@@ -1,19 +1,32 @@
 import { useState, useEffect } from 'react';
 import { todoApi } from '../services/todoApi';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 export function useTodos() {
+  const { isAuthenticated, logout } = useAuth();
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const loadTodos = async () => {
+    if (!isAuthenticated) {
+      setTodos([]);
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
       const data = await todoApi.getAll();
       setTodos(data);
     } catch (err) {
-      setError(err.message);
+      // If authentication error, logout user
+      if (err.message.includes('authentication') || err.message.includes('401')) {
+        await logout();
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -61,8 +74,13 @@ export function useTodos() {
   };
 
   useEffect(() => {
-    loadTodos();
-  }, []);
+    if (isAuthenticated) {
+      loadTodos();
+    } else {
+      setTodos([]);
+      setLoading(false);
+    }
+  }, [isAuthenticated]);
 
   return {
     todos,
