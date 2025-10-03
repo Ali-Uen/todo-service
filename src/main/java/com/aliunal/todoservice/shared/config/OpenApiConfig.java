@@ -1,7 +1,6 @@
 package com.aliunal.todoservice.shared.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
@@ -31,7 +30,6 @@ public class OpenApiConfig {
         Info info = new Info()
                 .title("Todo Service API")
                 .version("1.0.0")
-                .contact(contact)
                 .description("This API exposes endpoints to manage todos.")
                 .termsOfService("https://www.example.com/terms")
                 .license(mitLicense);
