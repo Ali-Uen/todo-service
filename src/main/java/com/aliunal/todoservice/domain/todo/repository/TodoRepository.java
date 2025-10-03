@@ -1,62 +1,23 @@
 package com.aliunal.todoservice.domain.todo.repository;
 
 import com.aliunal.todoservice.domain.todo.entity.Todo;
+import com.aliunal.todoservice.shared.enums.Priority;
+
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Todo Repository Interface - Domain Contract
- * Defines operations for Todo persistence without Spring Data dependencies
- */
 public interface TodoRepository {
-    
-    /**
-     * Save a todo entity
-     */
     Todo save(Todo todo);
-    
-    /**
-     * Find todo by ID
-     */
-    Optional<Todo> findById(Long id);
-    
-    /**
-     * Find all todos
-     */
     List<Todo> findAll();
-    
-    /**
-     * Find todos by completion status
-     */
+    List<Todo> findByUserId(Long userId);
     List<Todo> findByDone(boolean done);
-    
-    /**
-     * Find todos by priority
-     */
-    List<Todo> findByPriority(Todo.Priority priority);
-    
-    /**
-     * Find todos containing title
-     */
+    List<Todo> findByUserIdAndDone(Long userId, boolean done);
+    Optional<Todo> findById(Long id);
+    Optional<Todo> findByIdAndUserId(Long id, Long userId);
     List<Todo> findByTitleContainingIgnoreCase(String title);
-    
-    /**
-     * Delete todo by ID
-     */
-    void deleteById(Long id);
-    
-    /**
-     * Check if todo exists by ID
-     */
+    List<Todo> findByPriority(Priority priority);
     boolean existsById(Long id);
-    
-    /**
-     * Count all todos
-     */
+    void deleteById(Long id);
     long count();
-    
-    /**
-     * Count todos by completion status
-     */
     long countByDone(boolean done);
 }

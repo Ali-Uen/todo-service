@@ -4,6 +4,7 @@ import com.aliunal.todoservice.domain.todo.entity.Todo;
 import com.aliunal.todoservice.domain.todo.repository.TodoRepository;
 import com.aliunal.todoservice.shared.dto.TodoRequest;
 import com.aliunal.todoservice.shared.dto.TodoResponse;
+import com.aliunal.todoservice.shared.enums.Priority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,62 @@ public class TodoService {
                 .stream()
                 .map(TodoResponse::from)
                 .toList();
+    }
+    
+    /**
+     * Find all todos for a specific user
+     */
+    @Transactional(readOnly = true)
+    public List<TodoResponse> findAllForUser(Long userId) {
+        return todoRepository.findByUserId(userId)
+                .stream()
+                .map(TodoResponse::from)
+                .toList();
+    }
+    
+    /**
+     * Find todo by ID for a specific user
+     */
+    @Transactional(readOnly = true) 
+    public TodoResponse findByIdForUser(Long id, Long userId) {
+        Todo todo = todoRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RuntimeException("Todo not found or access denied"));
+        return TodoResponse.from(todo);
+    }
+    
+    /**
+     * Update a todo for a specific user
+     */
+    public TodoResponse updateForUser(Long id, TodoRequest request, Long userId) {
+        validateTodoRequest(request);
+        
+        Todo todo = todoRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RuntimeException("Todo not found or access denied"));
+                
+        // Update content
+        todo.updateContent(request.title(), request.description(), request.priority());
+        
+        // Update completion status
+        if (request.done() != null) {
+            if (request.done()) {
+                todo.markAsDone();
+            } else {
+                todo.markAsUndone();
+            }
+        }
+        
+        Todo savedTodo = todoRepository.save(todo);
+        return TodoResponse.from(savedTodo);
+    }
+    
+    /**
+     * Delete a todo for a specific user
+     */
+    public void deleteForUser(Long id, Long userId) {
+        if (!todoRepository.findByIdAndUserId(id, userId).isPresent()) {
+            throw new RuntimeException("Todo not found or access denied");
+        }
+        todoRepository.deleteById(id);
     }
     
     /**
@@ -72,9 +129,32 @@ public class TodoService {
     public TodoResponse create(TodoRequest request) {
         validateTodoRequest(request);
         
-        Todo todo = new Todo(request.title(), request.description());
+        // For backward compatibility, use default user ID 1
+        // This should be updated to use actual user ID from authentication
+        Todo todo = new Todo(request.title(), request.description(), 1L);
         
         // Set priority (default to MEDIUM if not provided)
+        if (request.priority() != null) {
+            todo.updatePriority(request.priority());
+        }
+        
+        if (request.done() != null && request.done()) {
+            todo.markAsDone();
+        }
+        
+        Todo savedTodo = todoRepository.save(todo);
+        return TodoResponse.from(savedTodo);
+    }
+    
+    /**
+     * Create a new todo for a specific user
+     */
+    public TodoResponse createForUser(TodoRequest request, Long userId) {
+        validateTodoRequest(request);
+        
+        Todo todo = new Todo(request.title(), request.description(), userId);
+        
+        // Set priority (default to MEDIUM if not provided) 
         if (request.priority() != null) {
             todo.updatePriority(request.priority());
         }
@@ -152,7 +232,7 @@ public class TodoService {
      * Find todos by priority
      */
     @Transactional(readOnly = true)
-    public List<TodoResponse> findByPriority(Todo.Priority priority) {
+    public List<TodoResponse> findByPriority(Priority priority) {
         return todoRepository.findByPriority(priority)
                 .stream()
                 .map(TodoResponse::from)
