@@ -1,61 +1,35 @@
-import { AddTodoForm } from './components/AddTodoForm';
-import { TodoList } from './components/TodoList';
-import { ToastContainer } from './components/ToastContainer';
-import { useTodos } from './hooks/useTodos';
+// Main App component with routing and authentication
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext.jsx';
+import { LoginPage } from './pages/LoginPage.jsx';
+import { RegisterPage } from './pages/RegisterPage.jsx';
+import { DashboardPage } from './pages/DashboardPage.jsx';
+import { Loading } from './components/Loading.jsx';
 import './App.css';
 
 function App() {
-  const {
-    todos,
-    loading,
-    error,
-    addTodo,
-    updateTodo,
-    deleteTodo,
-    toggleTodo
-  } = useTodos();
-
-  const completedCount = todos.filter(todo => todo.done).length;
-  const totalCount = todos.length;
-
   return (
-    <div className="app">
-      <div className="container">
-        <header className="app-header">
-          <h1>Todo-App</h1>
-          <p className="subtitle">
-            Verwalte deine Aufgaben effizient
-          </p>
-          {totalCount > 0 && (
-            <div className="stats">
-              {completedCount} von {totalCount} Todos erledigt
-            </div>
-          )}
-        </header>
-
-        <main className="app-main">
-          <AddTodoForm 
-            onAdd={addTodo} 
-            loading={loading} 
-          />
-          
-          <TodoList
-            todos={todos}
-            loading={loading}
-            error={error}
-            onToggle={toggleTodo}
-            onDelete={deleteTodo}
-            onUpdate={updateTodo}
-          />
-        </main>
-
-        <footer className="app-footer">
-          <p>React Todo App mit Spring Boot Backend</p>
-        </footer>
-      </div>
-      
-      <ToastContainer />
-    </div>
+    <Router>
+      <AuthProvider>
+        <div className="app">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            
+            {/* Protected Routes */}
+            <Route path="/dashboard" element={<DashboardPage />} />
+            
+            {/* Default redirect */}
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            
+            {/* Catch all - redirect to dashboard */}
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </div>
+      </AuthProvider>
+    </Router>
   );
 }
 

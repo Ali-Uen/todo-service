@@ -1,0 +1,67 @@
+/* UserProfile component styles */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  border: 1px solid #dee2e6;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.user-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.user-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #212529;
+}
+
+.user-email {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.logout-btn {
+  padding: 0.375rem 0.75rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.logout-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

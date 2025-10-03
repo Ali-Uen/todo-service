@@ -1,8 +1,8 @@
 /* Modern CSS Variables & Design System */
 :root {
   /* Brand Colors */
-  --primary-color: #6366f1;
-  --primary-hover: #4f46e5;
+  --primary-color: #667eea;
+  --primary-hover: #764ba2;
   --primary-light: #e0e7ff;
   --success-color: #10b981;
   --success-light: #d1fae5;
@@ -19,7 +19,7 @@
   
   /* Background Colors */
   --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
+  --bg-secondary: #f8f9fa;
   --bg-tertiary: #f3f4f6;
   --bg-overlay: rgba(0, 0, 0, 0.1);
   

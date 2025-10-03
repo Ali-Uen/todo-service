@@ -211,6 +211,18 @@ public class AuthController {
     }
     
     /**
+     * Health check endpoint
+     */
+    @Operation(summary = "Health check", description = "Check if the authentication API is healthy and running")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "API is healthy")
+    })
+    @GetMapping("/health")
+    public ResponseEntity<MessageResponse> health() {
+        return ResponseEntity.ok(new MessageResponse("Authentication API is healthy"));
+    }
+    
+    /**
      * Simple error response record
      */
     public record ErrorResponse(String code, String message) {}
