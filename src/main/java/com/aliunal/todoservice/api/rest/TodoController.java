@@ -4,6 +4,7 @@ import com.aliunal.todoservice.domain.todo.service.TodoService;
 import com.aliunal.todoservice.shared.dto.TodoRequest;
 import com.aliunal.todoservice.shared.dto.TodoResponse;
 import com.aliunal.todoservice.shared.dto.TodoStatistics;
+import com.aliunal.todoservice.infrastructure.security.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,21 +28,54 @@ import java.util.List;
 public class TodoController {
     
     private final TodoService todoService;
+    private final JwtTokenProvider jwtTokenProvider;
     
-    public TodoController(TodoService todoService) {
+    public TodoController(TodoService todoService, JwtTokenProvider jwtTokenProvider) {
         this.todoService = todoService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
     
     /**
-     * Get all todos
+     * Extract user ID from JWT token
      */
-    @Operation(summary = "Get all todos", description = "Retrieve all todos with optional filtering")
+    private Long extractUserIdFromToken(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("Missing or invalid authorization header");
+        }
+        String token = authHeader.substring(7);
+        return jwtTokenProvider.getUserIdFromToken(token);
+    }
+    
+    /**
+     * Get all todos for authenticated user
+     */
+    @Operation(summary = "Get all todos", description = "Retrieve all todos for authenticated user with optional filtering")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully retrieved todos"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
     public ResponseEntity<List<TodoResponse>> getAllTodos(
+            @Parameter(description = "Filter by completion status")
+            @RequestParam(required = false) Boolean completed,
+            @Parameter(description = "Search term for title/description")
+            @RequestParam(required = false) String search,
+            @RequestHeader("Authorization") String authHeader) {
+        
+        Long userId = extractUserIdFromToken(authHeader);
+        List<TodoResponse> todos = todoService.findAllForUser(userId);
+        
+        // Apply filters if needed (todo: implement user-specific filtering)
+        return ResponseEntity.ok(todos);
+    }
+    
+    /**
+     * Get all todos (public endpoint for backward compatibility)
+     */
+    @Operation(summary = "Get all todos (public)", description = "Retrieve all todos without authentication")
+    @GetMapping("/public")
+    public ResponseEntity<List<TodoResponse>> getAllTodosPublic(
             @Parameter(description = "Filter by completion status")
             @RequestParam(required = false) Boolean completed,
             @Parameter(description = "Search term for title/description")
@@ -61,36 +95,46 @@ public class TodoController {
     }
     
     /**
-     * Get todo by ID
+     * Get todo by ID for authenticated user
      */
-    @Operation(summary = "Get todo by ID", description = "Retrieve a specific todo by its ID")
+    @Operation(summary = "Get todo by ID", description = "Retrieve a specific todo by its ID for authenticated user")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Todo found and returned"),
-        @ApiResponse(responseCode = "404", description = "Todo not found"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
+        @ApiResponse(responseCode = "404", description = "Todo not found or access denied"),
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/{id}")
     public ResponseEntity<TodoResponse> getTodoById(
             @Parameter(description = "ID of the todo to retrieve")
-            @PathVariable Long id) {
-        TodoResponse todo = todoService.findById(id);
-        return ResponseEntity.ok(todo);
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String authHeader) {
+        try {
+            Long userId = extractUserIdFromToken(authHeader);
+            TodoResponse todo = todoService.findByIdForUser(id, userId);
+            return ResponseEntity.ok(todo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
     
     /**
-     * Create new todo
+     * Create new todo for authenticated user
      */
-    @Operation(summary = "Create new todo", description = "Create a new todo item")
+    @Operation(summary = "Create new todo", description = "Create a new todo item for authenticated user")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Todo created successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid input data"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized"),
         @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping
     public ResponseEntity<TodoResponse> createTodo(
             @Parameter(description = "Todo data to create")
-            @Valid @RequestBody TodoRequest request) {
-        TodoResponse created = todoService.create(request);
+            @Valid @RequestBody TodoRequest request,
+            @RequestHeader("Authorization") String authHeader) {
+        Long userId = extractUserIdFromToken(authHeader);
+        TodoResponse created = todoService.createForUser(request, userId);
         URI location = URI.create("/api/v1/todos/" + created.id());
         return ResponseEntity.created(location).body(created);
     }
